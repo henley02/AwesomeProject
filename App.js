@@ -6,60 +6,67 @@
 
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View, Image, Alert} from 'react-native';
-import {StackNavigator,TabNavigator,TabBarBottom} from 'react-navigation';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import {TabNavigator, TabBarBottom, StackNavigator} from 'react-navigation';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import {px2dp} from './app/public/javascript/util';
-
-import HomeView from './app/pages/home/home';
-import ProfileView from './app/pages/profile/profile';
+import HomeScreen from './app/pages/screens/homeScreen/homeScreen';
+import PersonalCenterScreen from './app/pages/screens/personalCenterScreen/personalCenterScreen';
+import DiscoverScreen from './app/pages/screens/discoverScreen/discoverScreen';
+import JCZQScreen from './app/pages/screens/lottery/jczq/jczq';
 
 const iconSize = px2dp(22);
 
-type Props = {};
-export default class App extends Component<Props> {
-    constructor(props) {
-        super(props);
-        this.state = {
-            selectedTab: 'home'
-        };
-    }
-
-    _changeTabIndex(val) {
-        this.setState({
-            selectedTab: val,
-        })
-    }
-
-    render() {
-
-        return (
-            <TabNavigator style={styles.container}>
-              <TabNavigator.Item
-                  selected={this.state.selectedTab === 'home'}
-                  title="Home"
-                  selectedTitleStyle={{color: "#3496f0"}}
-                  renderIcon={() => <Icon name="home" size={iconSize} color="#666"/>}
-                  renderSelectedIcon={() => <Icon name="home" size={iconSize} color="#3496f0"/>}
-                  onPress={this._changeTabIndex.bind(this, 'home')}>
-                <HomeView/>
-              </TabNavigator.Item>
-              <TabNavigator.Item
-                  selected={this.state.selectedTab === 'profile'}
-                  title="Profile"
-                  selectedTitleStyle={{color: "#3496f0"}}
-                  renderIcon={() => <Icon name="user" size={iconSize} color="#666"/>}
-                  renderSelectedIcon={() => <Icon name="user" size={iconSize} color="#3496f0"/>}
-                  onPress={this._changeTabIndex.bind(this, 'profile')}>
-                <ProfileView/>
-              </TabNavigator.Item>
-            </TabNavigator>
-        );
-    }
-}
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#FFF',
-    },
+const HomeStack = StackNavigator({
+    'Home': {screen: HomeScreen},
+    'JCZQ': {screen: JCZQScreen},
+})
+const PersonalCenterStack = StackNavigator({
+    PersonalCenter: { screen: PersonalCenterScreen },
+    JCZQ: { screen: JCZQScreen },
 });
+export default TabNavigator(
+    {
+        'Home': {screen: HomeStack},//screen和导航的功能是一样的，对应界面名称，可以在其他页面通过这个screen传值和跳转
+        'Discover': {screen: DiscoverScreen},
+        'PersonalCenter': {screen: PersonalCenterStack},
+    },
+    {
+        navigationOptions: ({navigation}) => ({//配置TabNavigator的一些属性
+            tabBarIcon: ({focused, tintColor}) => {//设置标签栏的图标
+                const {routeName} = navigation.state;
+                let iconName;
+                if (routeName === 'Home') {
+                    iconName = `ios-home-outline`;
+                } else if (routeName == 'Discover') {
+                    iconName = `ios-eye-outline`;
+                } else if (routeName === 'PersonalCenter') {
+                    iconName = `ios-contact-outline`;
+                }
+                return <Ionicons name={iconName} size={25} color={tintColor}/>;
+            },
+            tabBarLabel: () => {//设置标签栏的title
+                const {routeName} = navigation.state;
+                if (routeName === 'Home') {
+                    return '我的'
+                } else if (routeName == 'Discover') {
+                    return '发现'
+                } else if (routeName === 'PersonalCenter') {
+                    return '个人中心'
+                }
+            },
+        }),
+        tabBarOptions: {//配置标签栏的一些属性
+            activeTintColor: 'red',//label和icon的前景色 活跃状态下
+            inactiveTintColor: 'gray',//label和icon的前景色 不活跃状态下
+            style: {backgroundColor: '#ffffff',},
+            labelStyle: {
+                fontSize: 10, // 文字大小
+            },
+        },
+        tabBarComponent: TabBarBottom,
+        tabBarPosition: 'bottom',//设置tabbar的位置，iOS默认在底部，安卓默认在顶部。（属性值：'top'，'bottom'）
+        animationEnabled: false,//是否在更改标签时显示动画
+        swipeEnabled: false,//是否允许在标签之间进行滑动
+        lazy: true,//是否根据需要懒惰呈现标签，而不是提前，意思是在app打开的时候将底部标签栏全部加载，默认false,推荐为true
+    }
+)
