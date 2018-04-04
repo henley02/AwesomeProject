@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, Button} from 'react-native';
 
 export default class JCZQ extends React.Component {
 
@@ -11,6 +11,7 @@ export default class JCZQ extends React.Component {
             <View>
                 <Text>竞彩足球</Text>
                 <Text>{itemId}</Text>
+                <Button onPress={() => this.props.navigation.goBack()} title="Go back" />
             </View>
         )
     }

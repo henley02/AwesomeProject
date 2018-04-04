@@ -13,16 +13,20 @@ import HomeScreen from './app/pages/screens/homeScreen/homeScreen';
 import PersonalCenterScreen from './app/pages/screens/personalCenterScreen/personalCenterScreen';
 import DiscoverScreen from './app/pages/screens/discoverScreen/discoverScreen';
 import JCZQScreen from './app/pages/screens/lottery/jczq/jczq';
+import DemoScreen from './app/pages/screens/lottery/demo/demo';
+import MyStorage from './app/public/lib/storage/storage';
 
 const iconSize = px2dp(22);
+global.storage = MyStorage._getStorage();
 
 const HomeStack = StackNavigator({
     'Home': {screen: HomeScreen},
     'JCZQ': {screen: JCZQScreen},
+    'Demo': {screen: DemoScreen},
 })
 const PersonalCenterStack = StackNavigator({
-    PersonalCenter: { screen: PersonalCenterScreen },
-    JCZQ: { screen: JCZQScreen },
+    PersonalCenter: {screen: PersonalCenterScreen},
+    JCZQ: {screen: JCZQScreen},
 });
 export default TabNavigator(
     {
