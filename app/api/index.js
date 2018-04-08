@@ -5,7 +5,7 @@ import $fetch from "../public/fetch/index";
  * @param {*} params
  * @param {*} config
  */
-export const FetchIndex = config => $fetch.post("javaAppadmin", {action: 90333, params: JSON.stringify({})}, config);
+export const FetchIndex = config => $fetch.post("javaAppadmin", {action: 903302, params: JSON.stringify({})}, config);
 
 
 /**

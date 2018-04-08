@@ -9,15 +9,13 @@ import {Platform, StyleSheet, Text, View, Image, Alert} from 'react-native';
 import {TabNavigator, TabBarBottom, StackNavigator} from 'react-navigation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {px2dp} from './app/public/javascript/util';
-import HomeScreen from './app/pages/screens/homeScreen/homeScreen';
+import HomeScreen from './app/pages/index/index';
 import PersonalCenterScreen from './app/pages/screens/personalCenterScreen/personalCenterScreen';
 import DiscoverScreen from './app/pages/screens/discoverScreen/discoverScreen';
 import JCZQScreen from './app/pages/screens/lottery/jczq/jczq';
 import DemoScreen from './app/pages/screens/lottery/demo/demo';
-import MyStorage from './app/public/lib/storage/storage';
 
 const iconSize = px2dp(22);
-global.storage = MyStorage._getStorage();
 
 const HomeStack = StackNavigator({
     'Home': {screen: HomeScreen},

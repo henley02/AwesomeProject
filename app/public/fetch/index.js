@@ -93,36 +93,25 @@ axios.interceptors.request.use(
 
         if (dir) {
             let params = {body: config.data.params};
-
-            // let userInfo = new Promise(async function (resolve, reject) {
-            //     let str = await storage.getItem("userInfo");
-            //     resolve(str);
-            // }).catch((error) => {
-            //     cosole.log(error)
-            // })
-            storage.getItem("userInfo").then((data) => {
-                console.log(data);
-            })
-            // console.log("userInfo:");
-            // console.log(userInfo)
-            return false;
-
-            if ((userInfo == undefined || userInfo == "") && config.isNeedLogin) {
+            let userInfo = DeviceStorage.get("userInfo");
+            if (config.isNeedLogin && !userInfo) {
                 //跳转登录
                 return false;
             }
+
             params.header = {
-                // platform:4,
-                uuid: '',//32位的uuid 187c6fc9405b4322872019948a66a5e3
-                platformCode: "h5mobile",
-                appVersion: "4.0.2",
-                platformVersion: "4.0.2",
+                appVersion: "5.2.4",
+                action: config.data.action,
+                cmdId: 1,
+                cmdName: "app_ios_zz",
+                phoneName: "iPhone 7 Plus",
+                platformCode: "IPHONE",
+                platformVersion: '11.3',
+                token: userInfo ? userInfo.token : "",
+                traceID: '',
                 userID: userInfo ? userInfo.id : "",
                 userType: userInfo ? userInfo.usertype : 1,
-                cmdName: "h5_zz",
-                cmdId: 0,
-                token: userInfo ? userInfo.token : "",
-                action: config.data.action
+                uuid: '4CD46CD06FAB4F36926A16409C72BD05',//32位的uuid 187c6fc9405b4322872019948a66a5e3
             };
 
             config.data = "request=" + getRequest(params);
