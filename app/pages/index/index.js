@@ -2,11 +2,9 @@ import React from 'react';
 import {Text, View, Button, Alert, FlatList} from 'react-native';
 import {FetchIndex} from './../../api/index';
 import Banner from './components/banner/banner';
-
-import DeviceStorage from './../../public/utils/DeviceStorage/DeviceStorage.js';
+import Notice from './components/notice/notice';
 
 export default class HomeScreen extends React.Component {
-
     constructor(props) {
         super(props);
         this.state = {
@@ -15,10 +13,15 @@ export default class HomeScreen extends React.Component {
         this.getIndexData();
     }
 
-    __keyExtractor = (item, index) => {
-        console.log(item)
-        item.moduleId
-    };
+    _keyExtractor = (item, index) => index.toString();
+    _renderItem = ({item}) => {
+        if (item.moduleId == 8)
+            return <Banner data={item}/>
+        if (item.moduleId == 7 && item.info.broadcast.length > 0)
+            return <Notice data={item.info.broadcast} type={1}/>
+        if (item.moduleId == 12 && item.info.winList.length > 0)
+            return <Notice data={item.info.winList} type={2}/>
+    }
 
     async getIndexData() {
         let map = {
@@ -44,11 +47,7 @@ export default class HomeScreen extends React.Component {
 
     render() {
         return (
-            <View>
-                <Text>adfadf</Text>
-                <FlatList data={this.state.dataSource} keyExtractor={this.__keyExtractor}
-                          renderItem={({item}) => <Text>{item.moduleName}</Text>}/>
-            </View>
+            <FlatList data={this.state.dataSource} keyExtractor={this._keyExtractor} renderItem={this._renderItem}/>
         );
     }
 }
